@@ -1,49 +1,32 @@
 package com.krillinator.lektion_9_userdetails_service_password_encoders.controller
 
+import com.krillinator.lektion_9_userdetails_service_password_encoders.model.CustomUser
+import com.krillinator.lektion_9_userdetails_service_password_encoders.repository.CustomUserRepository
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.security.crypto.password.PasswordEncoder
 import org.springframework.web.bind.annotation.GetMapping
+import org.springframework.web.bind.annotation.PostMapping
+import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestMapping
-import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.bind.annotation.RestController
 
 @RestController
 @RequestMapping("/user")
 class UserController(
-    @Autowired val passwordEncoder: PasswordEncoder // BCrypt password (Because of @Configuration & @Bean)
+    @Autowired val customUserRepository: CustomUserRepository,
+    @Autowired val passwordEncoder: PasswordEncoder
 ) {
 
-    @GetMapping("/password")
-    fun passwordEncoderTest(
-        @RequestParam(defaultValue = "123") password: String
-    ): String {
+    // TODO - User Validation
+    @PostMapping
+    fun saveUserTest(@RequestBody customUser: CustomUser): String {
 
-        return "password is: ${passwordEncoder.encode(password)} "
-    }
+        val newUser: CustomUser = customUser
+        customUser.password = passwordEncoder.encode(newUser.password) // Convert to Bcrypt
 
+        customUserRepository.save(newUser)
 
-    @GetMapping
-    fun nonUserTest(): String {
-
-        return "Did it work? Can non-users access this endpoint?"
-    }
-
-    @GetMapping("/authenticated")
-    fun userTest(): String {
-
-        return "Did it work? Can USERS access this endpoint?"
-    }
-
-    @GetMapping("/authenticated/manager")
-    fun userTestManager(): String {
-
-        return "Did it work? Can MANAGER access this endpoint?"
-    }
-
-    @GetMapping("/authenticated/admin")
-    fun userTestAdmin(): String {
-
-        return "Did it work? Can ADMIN access this endpoint?"
+        return "SAVING USER"
     }
 
 }
