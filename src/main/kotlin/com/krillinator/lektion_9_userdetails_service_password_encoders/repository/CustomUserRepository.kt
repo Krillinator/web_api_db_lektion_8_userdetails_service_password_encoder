@@ -2,7 +2,6 @@ package com.krillinator.lektion_9_userdetails_service_password_encoders.reposito
 
 import com.krillinator.lektion_9_userdetails_service_password_encoders.model.CustomUser
 import org.springframework.data.jpa.repository.JpaRepository
-import org.springframework.data.jpa.repository.Query
 import org.springframework.stereotype.Repository
 import java.util.Optional
 

@@ -21,10 +21,8 @@ class UserController(
     @PostMapping
     fun saveUserTest(@RequestBody customUser: CustomUser): String {
 
-        val newUser: CustomUser = customUser
-        customUser.password = passwordEncoder.encode(newUser.password) // Convert to Bcrypt
-
-        customUserRepository.save(newUser)
+        customUser.password = passwordEncoder.encode(customUser.password) // Convert to Bcrypt
+        customUserRepository.save(customUser) // !bcrypt
 
         return "SAVING USER"
     }

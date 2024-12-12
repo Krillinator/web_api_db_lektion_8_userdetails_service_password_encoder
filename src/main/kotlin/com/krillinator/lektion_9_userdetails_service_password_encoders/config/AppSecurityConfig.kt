@@ -31,6 +31,7 @@ class AppSecurityConfig(
                 .anyRequest().authenticated() // Must Log In
             }
             .formLogin {}
+            // .authenticationProvider(customDaoAuthenticationProvider())
 
         return http.build()
     }
