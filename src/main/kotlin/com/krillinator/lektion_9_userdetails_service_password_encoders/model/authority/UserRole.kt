@@ -18,12 +18,8 @@ enum class UserRole(private val permissions: List<UserPermission>) {
         return permissions
     }
 
+    // IMPORTANT - Why do we create this?
     fun getAuthorities(): MutableCollection<GrantedAuthority> {
-
-        // TODO:
-        //  ROLE_ + this.name (ADMIN) = ROLE_ADMIN
-        //  List<Permissions> = "", "", "" , "" (instead of list of strings)
-        //  ONE array with both: ROLES + PERMISSIONS
 
         val permissions: List<GrantedAuthority> = this.getPermissions().map { SimpleGrantedAuthority(it.getContent()) }
         val authorities: MutableCollection<GrantedAuthority> = mutableListOf(SimpleGrantedAuthority("ROLE_" + this.name))

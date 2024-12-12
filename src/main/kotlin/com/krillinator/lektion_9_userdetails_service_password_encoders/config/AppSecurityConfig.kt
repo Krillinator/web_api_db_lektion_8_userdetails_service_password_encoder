@@ -1,6 +1,7 @@
 package com.krillinator.lektion_9_userdetails_service_password_encoders.config
 
 import com.krillinator.lektion_9_userdetails_service_password_encoders.model.CustomUserDetailsService
+import com.krillinator.lektion_9_userdetails_service_password_encoders.model.authority.UserPermission
 import com.krillinator.lektion_9_userdetails_service_password_encoders.model.authority.UserRole.*
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.context.annotation.Bean
@@ -29,6 +30,7 @@ class AppSecurityConfig(
                 .requestMatchers("/", "/login", "/logout", "/user", "/user/password").permitAll()
                 .requestMatchers("/user/admin").hasRole(ADMIN.name) // UserRole.ADMIN.name
                 .requestMatchers("/user/user").hasRole(USER.name)
+                .requestMatchers("/user/read").hasAnyAuthority(UserPermission.READ.getContent())
                 .anyRequest().authenticated() // Must Log In
             }
             .formLogin {}
