@@ -1,14 +1,15 @@
 package com.krillinator.lektion_9_userdetails_service_password_encoders.model
 
-import jakarta.persistence.Entity
-import jakarta.persistence.GeneratedValue
-import jakarta.persistence.GenerationType
-import jakarta.persistence.Id
+import com.krillinator.lektion_9_userdetails_service_password_encoders.model.authority.UserRole
+import jakarta.persistence.*
 
 @Entity
 class CustomUser(
     var username: String,
     var password: String,
+
+    @Enumerated(value = EnumType.STRING)
+    var role: UserRole,
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)

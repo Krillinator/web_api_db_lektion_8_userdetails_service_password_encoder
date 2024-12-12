@@ -17,6 +17,18 @@ class UserController(
     @Autowired val passwordEncoder: PasswordEncoder
 ) {
 
+    @GetMapping("/admin")
+    fun testAdmin(): String {
+
+        return " ADMIN ONLY "
+    }
+
+    @GetMapping("/user")
+    fun testManager(): String {
+
+        return " USER ONLY "
+    }
+
     // TODO - User Validation
     @PostMapping
     fun saveUserTest(@RequestBody customUser: CustomUser): String {

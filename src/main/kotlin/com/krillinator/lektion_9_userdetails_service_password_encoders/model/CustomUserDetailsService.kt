@@ -29,6 +29,7 @@ class CustomUserDetailsService(
             return CustomUserDetails(
                 user.username,
                 user.password,
+                user.role.getAuthorities()
             )
         } else {
             throw UsernameNotFoundException("Username wasn't found")

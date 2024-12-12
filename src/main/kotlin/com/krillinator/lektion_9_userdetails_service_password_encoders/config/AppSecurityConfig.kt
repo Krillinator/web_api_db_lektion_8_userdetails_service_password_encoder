@@ -1,6 +1,7 @@
 package com.krillinator.lektion_9_userdetails_service_password_encoders.config
 
 import com.krillinator.lektion_9_userdetails_service_password_encoders.model.CustomUserDetailsService
+import com.krillinator.lektion_9_userdetails_service_password_encoders.model.authority.UserRole.*
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
@@ -26,8 +27,8 @@ class AppSecurityConfig(
             .csrf { it.disable() } // Disable CSRF protection (During Debugging Only)
             .authorizeHttpRequests { it
                 .requestMatchers("/", "/login", "/logout", "/user", "/user/password").permitAll()
-                .requestMatchers("/user/authenticated/admin").hasRole("ADMIN")
-                .requestMatchers("/user/authenticated/manager").hasRole("MANAGER")
+                .requestMatchers("/user/admin").hasRole(ADMIN.name) // UserRole.ADMIN.name
+                .requestMatchers("/user/user").hasRole(USER.name)
                 .anyRequest().authenticated() // Must Log In
             }
             .formLogin {}
