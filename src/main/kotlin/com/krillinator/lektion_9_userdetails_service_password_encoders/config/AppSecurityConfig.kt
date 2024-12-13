@@ -7,8 +7,10 @@ import com.krillinator.lektion_9_userdetails_service_password_encoders.model.aut
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
+import org.springframework.security.authentication.AuthenticationManager
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider
 import org.springframework.security.config.Customizer
+import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder
 import org.springframework.security.config.annotation.web.builders.HttpSecurity
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity
 import org.springframework.security.config.annotation.web.configurers.CorsConfigurer
@@ -16,6 +18,7 @@ import org.springframework.security.config.http.SessionCreationPolicy
 import org.springframework.security.crypto.password.PasswordEncoder
 import org.springframework.security.web.SecurityFilterChain
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter
+
 
 @Configuration
 @EnableWebSecurity // Enable Security Override
@@ -34,7 +37,7 @@ class AppSecurityConfig @Autowired constructor(
             .csrf { it.disable() } // Disable CSRF protection (During Debugging Only)
             .cors { Customizer.withDefaults<CorsConfigurer<HttpSecurity>>() } // TODO - Not enabled correctly
             .authorizeHttpRequests { it
-                .requestMatchers("/", "/login", "/logout", "/user", "/user/password").permitAll()
+                .requestMatchers("/", "/login", "/logout", "/user", "/user/password", "/who-am-i").permitAll()
                 .requestMatchers("/user/admin").hasRole(ADMIN.name) // UserRole.ADMIN.name
                 .requestMatchers("/user/user").hasRole(USER.name)
                 .requestMatchers("/user/read").hasAnyAuthority(UserPermission.READ.getContent())
@@ -49,13 +52,20 @@ class AppSecurityConfig @Autowired constructor(
     }
 
     // Spring, use our custom implementation (Explicit)
-    @Bean
-    fun customDaoAuthenticationProvider(): DaoAuthenticationProvider {
-        val dao = DaoAuthenticationProvider()
-        dao.setPasswordEncoder(passwordEncoder)
-        dao.setUserDetailsService(customUserDetailsService)
 
-        return dao
+    @Bean
+    @Throws(Exception::class)
+    fun authenticationManager(http: HttpSecurity): AuthenticationManager {
+        val daoAuthenticationProvider = DaoAuthenticationProvider()
+        daoAuthenticationProvider.setUserDetailsService(customUserDetailsService)
+        daoAuthenticationProvider.setPasswordEncoder(passwordEncoder)
+
+        val authenticationManagerBuilder = http.getSharedObject(
+            AuthenticationManagerBuilder::class.java
+        )
+        authenticationManagerBuilder.authenticationProvider(daoAuthenticationProvider)
+
+        return authenticationManagerBuilder.build()
     }
 
 }

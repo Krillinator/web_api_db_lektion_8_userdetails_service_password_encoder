@@ -20,7 +20,7 @@ import java.util.concurrent.TimeUnit
 
 
 @RestController
-class AuthenticationController @Autowired constructor(
+class AuthenticationController (
     val authenticationManager: AuthenticationManager,
     val jwtUtil: JwtUtil
 ) {
