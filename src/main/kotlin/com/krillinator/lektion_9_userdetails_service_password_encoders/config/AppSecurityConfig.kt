@@ -43,7 +43,7 @@ class AppSecurityConfig @Autowired constructor(
                 .requestMatchers("/user/read").hasAnyAuthority(UserPermission.READ.getContent())
                 .anyRequest().authenticated() // Must Log In
             }
-            .formLogin {}
+
             // .authenticationProvider(customDaoAuthenticationProvider())
             .sessionManagement { it.sessionCreationPolicy(SessionCreationPolicy.STATELESS) }
             .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter::class.java) // on each request
