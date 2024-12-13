@@ -21,8 +21,8 @@ enum class UserRole(private val permissions: List<UserPermission>) {
     // IMPORTANT - Why do we create this?
     fun getAuthorities(): MutableCollection<GrantedAuthority> {
 
-        val permissions: List<GrantedAuthority> = this.getPermissions().map { SimpleGrantedAuthority(it.getContent()) }
         val authorities: MutableCollection<GrantedAuthority> = mutableListOf(SimpleGrantedAuthority("ROLE_" + this.name))
+        val permissions: List<GrantedAuthority> = this.getPermissions().map { SimpleGrantedAuthority(it.getContent()) }
 
         // [READ, WRITE, UPDATE, DELETE] - convert to strings
         permissions.map { element -> authorities.add(element) }

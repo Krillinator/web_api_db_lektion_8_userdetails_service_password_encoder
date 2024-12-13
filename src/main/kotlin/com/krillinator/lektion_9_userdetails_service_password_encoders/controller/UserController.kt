@@ -1,8 +1,10 @@
 package com.krillinator.lektion_9_userdetails_service_password_encoders.controller
 
 import com.krillinator.lektion_9_userdetails_service_password_encoders.model.CustomUser
+import com.krillinator.lektion_9_userdetails_service_password_encoders.model.TestObject
 import com.krillinator.lektion_9_userdetails_service_password_encoders.repository.CustomUserRepository
 import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.http.ResponseEntity
 import org.springframework.security.crypto.password.PasswordEncoder
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PostMapping
@@ -16,6 +18,14 @@ class UserController(
     @Autowired val customUserRepository: CustomUserRepository,
     @Autowired val passwordEncoder: PasswordEncoder
 ) {
+
+    @GetMapping
+    fun testString(): ResponseEntity<TestObject> {
+
+        return ResponseEntity.ok(
+            TestObject("Hello World", "From /user")
+        )
+    }
 
     @GetMapping("/admin")
     fun testAdmin(): String {
