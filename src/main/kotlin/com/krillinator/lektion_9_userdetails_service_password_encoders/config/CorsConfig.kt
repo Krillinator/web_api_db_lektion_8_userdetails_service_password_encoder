@@ -24,6 +24,7 @@ class CorsConfig {
         source.registerCorsConfiguration("/api/v1/who-am-i", corsConfiguration)
         source.registerCorsConfiguration("/api/**", corsConfiguration)
         source.registerCorsConfiguration("/user", corsConfiguration)
+        source.registerCorsConfiguration("/login", corsConfiguration)
 
         return source
     }

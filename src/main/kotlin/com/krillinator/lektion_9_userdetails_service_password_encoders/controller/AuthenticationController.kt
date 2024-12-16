@@ -6,6 +6,7 @@ import jakarta.servlet.http.Cookie
 import jakarta.servlet.http.HttpServletRequest
 import jakarta.servlet.http.HttpServletResponse
 import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.http.HttpHeaders
 import org.springframework.http.ResponseEntity
 import org.springframework.security.authentication.AuthenticationManager
 import org.springframework.security.authentication.BadCredentialsException
@@ -24,6 +25,37 @@ class AuthenticationController (
     val authenticationManager: AuthenticationManager,
     val jwtUtil: JwtUtil
 ) {
+
+    @GetMapping("/header")
+    fun testHeader(
+        request: HttpServletRequest
+    ): ResponseEntity<String> {
+
+        println("---DEBUGGING---")
+        // LOCAL
+        println("---LOCAL---")
+        println(request.localAddr)
+        println(request.localName)
+        println(request.localPort)
+        // REMOTE
+        println("---REMOTE---")
+        println(request.remoteAddr)
+        println(request.remoteHost)
+        println(request.remotePort)
+        println("---OTHER---")
+        println(request.cookies.map { it.name })
+        println(request.isRequestedSessionIdValid)
+        println(request.isRequestedSessionIdFromURL)
+        println(request.isRequestedSessionIdFromCookie)
+
+
+        val headers = HttpHeaders()
+        headers.set("myTest", "JWT")
+
+        return ResponseEntity.ok()
+            .headers(headers)
+            .body("Testing ResponseEntity myTest")
+    }
 
     // Authentication
     @PostMapping("/login")
@@ -60,7 +92,7 @@ class AuthenticationController (
 
                 println(cookie)
 
-                return ResponseEntity.ok(token)
+                return ResponseEntity.ok("Login Succesful")
             } else {
                 return ResponseEntity.internalServerError()
                     .body("Authenticated principal is not of type CustomUserDetails")
